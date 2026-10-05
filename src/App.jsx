@@ -1,5 +1,40 @@
 import pictureOfMeg from './assets/meg.jpg'
+import cLogo from './assets/C.webp'
+import dockerLogo from './assets/docker.png'
+import javascriptLogo from './assets/javascript.webp'
+import mysqlLogo from './assets/mysql.svg'
+import nodejsLogo from './assets/nodejs.webp'
+import rustLogo from './assets/rust.jpg'
 import './App.css'
+
+const heroLogos = [
+  { name: 'C', image: cLogo, x: '0%', y: '18%' },
+  { name: 'Docker', image: dockerLogo, x: '25%', y: '0%' },
+  { name: 'JavaScript', image: javascriptLogo, x: '75%', y: '0%' },
+  { name: 'MySQL', image: mysqlLogo, x: '100%', y: '18%' },
+  { name: 'Node.js', image: nodejsLogo, x: '0%', y: '64%' },
+  { name: 'Rust', image: rustLogo, x: '100%', y: '64%' },
+].map((logo) => {
+  // Choose once per page load so re-renders don't change an orbit mid-flight.
+  const duration = 36 + Math.random() * 16
+  const radiusX = 58 + Math.random() * 4
+  const radiusY = 12 + Math.random() * 12
+  const centerY = 22 + Math.random() * 16
+  const tilt = (Math.random() - 0.5) * 16
+  const orbitStyle = {
+    '--orbit-duration': `${duration}s`,
+    '--orbit-delay': `${-Math.random() * duration}s`,
+    '--orbit-direction': Math.random() < 0.5 ? 'normal' : 'reverse',
+  }
+
+  for (let point = 0; point < 8; point += 1) {
+    const angle = point * Math.PI / 4
+    orbitStyle[`--orbit-x-${point}`] = `${50 - Math.cos(angle) * radiusX}%`
+    orbitStyle[`--orbit-y-${point}`] = `${centerY + Math.sin(angle) * radiusY + Math.cos(angle) * tilt}%`
+  }
+
+  return { ...logo, orbitStyle }
+})
 
 const profile = {
   name: 'Ingve Værnes',
@@ -62,6 +97,22 @@ function App() {
           </div>
           <div className="hero-visual">
             <img src={pictureOfMeg} alt="Portrett av Ingve Værnes" />
+            <div className="hero-logos" role="group" aria-label="Teknologier jeg bruker">
+              {heroLogos.map((logo) => (
+                <div
+                  className="hero-logo-position"
+                  key={logo.name}
+                  style={{ '--logo-x': logo.x, '--logo-y': logo.y, ...logo.orbitStyle }}
+                >
+                  <div className="hero-logo-float">
+                    <div className="hero-logo" tabIndex={0} aria-label={logo.name}>
+                      <img src={logo.image} alt="" />
+                      <span className="hero-logo-label" aria-hidden="true">{logo.name}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="hero-image-caption"><span>Ingve Værnes</span><span>Trondheim, Norge</span></div>
           </div>
         </section>
@@ -88,7 +139,6 @@ function App() {
                 <article className="expertise-card" key={item.number}>
                   <span className="card-number">{item.number}</span>
                   <div><h3>{item.title}</h3><p>{item.description}</p></div>
-                  <span className="card-plus" aria-hidden="true">↗</span>
                 </article>
               ))}
             </div>

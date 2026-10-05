@@ -27,9 +27,38 @@ h1 { max-width: 660px; margin: 68px 0 24px; font-size: clamp(63px, 5.2vw, 95px);
 .text-link:hover { gap: 48px; }
 .text-link svg { width: 20px; height: 20px; }
 .hero-index { display: flex; width: 100%; justify-content: space-between; margin-top:5rem; color: #a3a59d; font-size: 9px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-.hero-visual { position: relative; width: 65%; height: 65%; justify-self: center; align-self: center; transform: translateY(-24px); overflow: hidden; background: #c9bba6; }
-.hero-visual img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 70% center; }
-.hero-image-caption { position: absolute; right: 0; bottom: 0; left: 0; display: flex; justify-content: space-between; gap: 12px; padding: 24px 6.5%; color: #fff; background: linear-gradient(transparent, rgba(20,27,20,.48)); font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.hero-visual { position: relative; isolation: isolate; width: 65%; height: 65%; justify-self: center; align-self: center; transform: translateY(-24px); background: #c9bba6; }
+.hero-visual > img { position: relative; z-index: 1; width: 100%; height: 100%; display: block; object-fit: cover; object-position: 70% center; }
+/* No stacking context here: orbiting logos share the portrait's depth layers. */
+.hero-logos { position: absolute; inset: 0; pointer-events: none; }
+.hero-logo-position { position: absolute; left: var(--logo-x); top: var(--logo-y); z-index: 2; transform: translate(-50%, -50%); animation: hero-logo-orbit var(--orbit-duration) linear infinite, hero-logo-depth var(--orbit-duration) step-end infinite; animation-delay: var(--orbit-delay); animation-direction: var(--orbit-direction); }
+.hero-logo { position: relative; display: grid; place-items: center; width: clamp(44px, 4.8vw, 70px); aspect-ratio: 1; padding: 10px; border: 1px solid #e6e2d9; border-radius: 50%; background: #fff; box-shadow: 0 6px 20px rgba(36,52,43,.14); pointer-events: auto; cursor: default; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.hero-logo img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 4px; }
+.hero-logo-position:hover, .hero-logo-position:focus-within { animation-play-state: paused; }
+.hero-logo-position:focus-within { z-index: 2 !important; }
+.hero-logo:hover, .hero-logo:focus-visible { transform: scale(1.18) rotate(8deg); border-color: #a3885b; box-shadow: 0 10px 26px rgba(36,52,43,.25); }
+.hero-logo:focus-visible { outline: 2px solid #a3885b; outline-offset: 4px; }
+.hero-logo-label { position: absolute; top: calc(100% + 8px); left: 50%; padding: 5px 9px; border-radius: 4px; background: #24342b; color: #fff; font-size: 10px; white-space: nowrap; opacity: 0; transform: translate(-50%, -4px); transition: opacity .2s ease, transform .2s ease; }
+.hero-logo:hover .hero-logo-label, .hero-logo:focus-visible .hero-logo-label { opacity: 1; transform: translate(-50%, 0); }
+@keyframes hero-logo-orbit {
+  0%, 100% { left: var(--orbit-x-0); top: var(--orbit-y-0); }
+  12.5% { left: var(--orbit-x-1); top: var(--orbit-y-1); }
+  25% { left: var(--orbit-x-2); top: var(--orbit-y-2); }
+  37.5% { left: var(--orbit-x-3); top: var(--orbit-y-3); }
+  50% { left: var(--orbit-x-4); top: var(--orbit-y-4); }
+  62.5% { left: var(--orbit-x-5); top: var(--orbit-y-5); }
+  75% { left: var(--orbit-x-6); top: var(--orbit-y-6); }
+  87.5% { left: var(--orbit-x-7); top: var(--orbit-y-7); }
+}
+@keyframes hero-logo-depth {
+  0%, 100% { z-index: 2; }
+  50% { z-index: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-position { animation: none; }
+  .hero-logo, .hero-logo-label { transition: none; }
+}
+.hero-image-caption { position: absolute; z-index: 1; right: 0; bottom: 0; left: 0; display: flex; justify-content: space-between; gap: 12px; padding: 24px 6.5%; color: #fff; background: linear-gradient(transparent, rgba(20,27,20,.48)); font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
 .section-wrap { padding-left: 8%; padding-right: 8%; }
 .section-number { color: #a98f65; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; }
 .about-section { display: grid; grid-template-columns: 27% 73%; padding-top: 152px; padding-bottom: 154px; }
