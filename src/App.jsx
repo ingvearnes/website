@@ -4,7 +4,7 @@ import dockerLogo from './assets/docker.png'
 import javascriptLogo from './assets/javascript.webp'
 import mysqlLogo from './assets/mysql.svg'
 import nodejsLogo from './assets/nodejs.webp'
-import rustLogo from './assets/rust.jpg'
+import rustLogo from './assets/rust.webp'
 import './App.css'
 
 const heroLogos = [
